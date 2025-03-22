@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="../stylesheets/style2.css">
+</head>
+<body>
+    <div class="header">
+        <h2>HealthConnect Patient Portal</h2>
+        <div class="profile">
+            <span>John Smith</span>
+            <div class="profile-icon">J</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-item">Dashboard</div>
+            <div class="sidebar-item active">My Documents</div>
+            <div class="sidebar-item">Appointments</div>
+            <div class="sidebar-item">Prescriptions</div>
+            <div class="sidebar-item">Messages</div>
+            <div class="sidebar-item">Profile</div>
+        </div>
+        
+        <div class="content">
+            <h2 class="content-title">My Documents</h2>
+            
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <h3 class="card-title">Upload Documents</h3>
+                        <div class="upload-area" id="dropArea">
+                            <p>Drag files here or click to browse</p>
+                            <input type="file" id="fileInput" style="display: none;" multiple>
+                        </div>
+                        <button class="button" id="uploadBtn">Upload</button>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="card">
+                        <h3 class="card-title">Recent Uploads</h3>
+                        <ul class="file-list">
+                            <li>• Blood Test Results.pdf</li>
+                            <li>• ECG Report.jpg</li>
+                            <li>• Medical History.docx</li>
+                        </ul>
+                        <a href="#" style="color: #3498db; display: block; margin-top: 10px;">View All Documents</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">Doctor's Recommendations</h3>
+                
+                <div class="recommendation">
+                    <div class="recommendation-header">
+                        <span class="doctor-name">Dr. Sarah Johnson - Cardiologist</span>
+                        <span class="date">Mar 12</span>
+                    </div>
+                    <p class="recommendation-text">Follow up appointment in 2 weeks. Continue with current medication.</p>
+                </div>
+                
+                <div class="recommendation">
+                    <div class="recommendation-header">
+                        <span class="doctor-name">Dr. Michael Chen - Primary Care</span>
+                        <span class="date">Mar 10</span>
+                    </div>
+                    <p class="recommendation-text">Please upload your latest blood glucose readings before next visit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="../javascripts/script2.js"></script>
+</body>
+</html>

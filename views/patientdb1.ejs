@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="../stylesheets/style.css">
+</head>
+<body>
+    <!-- Header Section -->
+     <div class="header">
+    <h1>HealthConnect Patient Portal</h1>
+    <div class="profile">
+        <span>Hetavi Modi</span>
+        <div class="profile-icon">H</div>
+    </div>
+    </div>
+
+    <!-- Container -->
+     <div class="container">
+
+        <!-- side nav bar -->
+        <div class="sidebar">
+            <div class="menu-item active">Dashboard</div>
+            <div class="menu-item">My Patients</div>
+            <div class="menu-item">Appointments</div>
+            <div class="menu-item">Prescriptions</div>
+            <div class="menu-item">Lab Results</div>
+            <div class="menu-item">Messages</div>
+            <div class="menu-item">Calendar</div>
+            <div class="menu-item">Settings</div>
+          </div>  
+
+        <!-- Main content -->
+         <div class="content">
+            <h2 class="content-title">My Documents</h2>
+
+            <!-- Upload Recent Files Section -->
+             <div class="row">
+                <!-- Upload Section -->
+                 <div class="col-6">
+                    <div class="card">
+                        <h3 class="card-title">Upload Documents</h3>
+                        <div class="upload-area" id="dropArea">
+                            <p>Drag files here or click to browse</p>
+                            <input type="file" id="fileInput" style="display: none;" multiple>
+                        </div>
+                        <button class="button" id="uploadBtn">Upload</button>
+                    </div>
+                 </div>
+
+                 <!-- Recent uploads section -->
+                 <div class="col-6">
+                    <div class="card">
+                        <h3 class="card-title">Recent Uploads</h3>
+                        <ul class="file-list">
+                            <li>Blood Test Results.pdf</li>
+                            <li>ECG report.jpg</li>
+                            <li>Medical History.docx</li>
+                        </ul>
+                        <a href="#" class="view-all">View all Documents</a>
+                        </div>
+                    </div>
+                 </div>
+
+                 <!-- Recommendation Section -->
+                 <div class="card">
+                    <h3 class="card-title">Doctor's Recommendations</h3>
+                    
+                    <div class="recommendation">
+                        <div class="recommendation-header">
+                            <span class="doctor-name">Dr. Sarah Johnson - Cardiologist</span>
+                            <span class="date">Mar 12</span>
+                        </div>
+                        <p class="recommendation-text">Follow up appointment in 2 weeks. Continue with current medication.</p>
+                    </div>
+                    
+                    <div class="recommendation">
+                        <div class="recommendation-header">
+                            <span class="doctor-name">Dr. Michael Chen - Primary Care</span>
+                            <span class="date">Mar 10</span>
+                        </div>
+                        <p class="recommendation-text">Please upload your latest blood glucose readings before next visit.</p>
+                    </div>
+                </div>
+         </div>
+     </div>
+</body>
+<script src="../javascripts/script.js"></script>
+</html>
