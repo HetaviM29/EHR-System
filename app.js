@@ -10,13 +10,11 @@ const app = express();
 
 mongoose.connect("mongodb://localhost:27017/");
 
-app.set('views' , path.join(__dirname, 'views'));
-app.set("view engine","ejs");
-
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:true}));
 
-
+app.set('views' , path.join(__dirname, 'views'));
+app.set("view engine","ejs");  
 
 app.use(
     session({
