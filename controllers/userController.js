@@ -8,7 +8,7 @@ const loadLogin = async(req,res)=>{
 const addUser = async(req,res)=>{
     try{
         const existingUser = await User.findOne({email: req.body.email});
-        if(exisitingUser){
+        if(existingUser){
             return res.send("Email already in use.");
         }
 
@@ -20,7 +20,7 @@ const addUser = async(req,res)=>{
 
         await user.save();
 
-        res.redirect('/login');
+        res.redirect('/');
     }catch(error){
         res.status(500).send("Error registering user");
     }

@@ -12,11 +12,27 @@ const userController = require('../controllers/userController');
 
 user_route.get("/",userController.loadLogin);
 user_route.post('/register',userController.addUser);
-user_route.post('/login',passport.authenticate("local",{
-    successRedirect: "/patientdb",
-    failureRedirect:"/",
-    failureFlash: true
-}));
+user_route.post('/login',(req,res,next)=>{
+    passport.authenticate("local",(err,user,info)=>{
+        if(err){
+            console.error("Passport Error: ",err);
+            return next(err);
+        }
+        if(!user){
+            console.log("Authentication Failed : ",info);
+            return res.render("login",{error: info.message , success: null})
+        }
+
+        req.logIn(user,(err)=>{
+            if(err){
+                console.error("Login Error: ",err);
+                return next(err);
+            }
+            return res.redirect("/patientdb");
+        });
+    })(req,res,next);
+});
+
 user_route.get('/patientdb',userController.isAuthenticated,userController.loadProfile);
 user_route.get('/logout',userController.logout);
 
