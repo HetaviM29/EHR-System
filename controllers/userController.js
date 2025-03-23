@@ -1,5 +1,7 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const File = require('../models/fileModel');
+
 
 const loadLogin = async(req,res)=>{
     res.render('login');
@@ -27,8 +29,18 @@ const addUser = async(req,res)=>{
 }
 
 const loadProfile = async(req,res)=>{
-    res.render('patientdb1',{user: req.user});
-}
+    try{
+        const files = await File.find().sort({uploadedAt: -1});
+
+        res.render('patientdb1',{
+                user: req.user,
+                files:files
+            });
+    }catch(error){
+        console.error('Error Fetching files: ',error);
+        res.status(500).send('Error loading dashboard');
+    }
+};
 
 const isAuthenticated = (req,res,next)=>{
     if(req.isAuthenticated()){

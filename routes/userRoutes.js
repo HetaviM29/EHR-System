@@ -36,4 +36,7 @@ user_route.post('/login',(req,res,next)=>{
 user_route.get('/patientdb',userController.isAuthenticated,userController.loadProfile);
 user_route.get('/logout',userController.logout);
 
+
+//file upload routes
+
 module.exports = user_route;

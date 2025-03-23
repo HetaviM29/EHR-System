@@ -67,7 +67,7 @@ function handleFiles(files){
 
 //handle upload button click
 uploadBtn.addEventListener('click',function(){
-    alert('Files Ready to upload');
+    document.querySelector('form').submit();
 })
 
 //Add click handlers for sidebar navigation

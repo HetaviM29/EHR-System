@@ -144,17 +144,45 @@ body{
     align-items: center;
 }
 
-.profile-icon{
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: white;
-    color: #3498db;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.profile-img{
+    height: 40px;
+    width: 40px;
+    border-radius: 2rem;
+    margin-right: 10px;
     margin-left: 10px;
 }
+
+/* .logout-btn{
+    height: 30px;
+    width: 60px;
+    border-radius: 0.5rem;
+    background-color: whitesmoke;
+    border: none;
+    color: black;
+} */
+
+.logout-btn a{
+ text-decoration: none;
+ color: black;   
+}
+
+#logout-btn {
+    background: #ffffff;
+    padding: 8px 20px;
+    border-radius: 25px;
+    border: none;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  #logout-btn:hover {
+    background: #e0dede;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 248, 249, 0.3);
+  }
 
 /* layout helper */
 

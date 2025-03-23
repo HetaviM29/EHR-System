@@ -9,11 +9,13 @@
 <body>
     <!-- Header Section -->
      <div class="header">
-    <h1>HealthConnect Patient Portal</h1>
+   
     <div class="profile">
+        <div class="profile-icon"><img src="../images/pfp_final_1.png" alt="user-pfp" class="profile-img"></div>  
         <span><%= user.name %></span>
-        <div class="profile-icon">H</div>
     </div>
+    <h1>HealthConnect Patient Portal</h1>
+    <button id="logout-btn" class="logout-btn"><a href="logout">Logout</a></button>
     </div>
 
     <!-- Container -->
@@ -36,27 +38,34 @@
             <h2 class="content-title">My Documents</h2>
 
             <!-- Upload Recent Files Section -->
-             <div class="row">
-                <!-- Upload Section -->
-                 <div class="col-6">
-                    <div class="card">
-                        <h3 class="card-title">Upload Documents</h3>
-                        <div class="upload-area" id="dropArea">
-                            <p>Drag files here or click to browse</p>
-                            <input type="file" id="fileInput" style="display: none;" multiple>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <h3 class="card-title">Upload Documents</h3>
+                            <div class="upload-area" id="dropArea">
+                                <p>Drag files here or click to browse</p>
+                                <input type="file" id="fileInput" name="myfile" style="display: none;" multiple>
+                            </div>
+                            <button class="button" type="submit" id="uploadBtn">Upload</button>
                         </div>
-                        <button class="button" id="uploadBtn">Upload</button>
                     </div>
-                 </div>
-
+                </div>
+            </form>
                  <!-- Recent uploads section -->
                  <div class="col-6">
                     <div class="card">
                         <h3 class="card-title">Recent Uploads</h3>
                         <ul class="file-list">
-                            <li>Blood Test Results.pdf</li>
-                            <li>ECG report.jpg</li>
-                            <li>Medical History.docx</li>
+                            <% if (files && files.length > 0) { %>
+                                <% files.forEach(function(file) { %>
+                                    <li>
+                                        <a href="<%= file.path %>" target="_blank"><%= file.filename %></a>
+                                    </li>
+                                <% }) %>
+                            <% } else { %>
+                                <li>No recent uploads</li>
+                            <% } %>
                         </ul>
                         <a href="#" class="view-all">View all Documents</a>
                         </div>
