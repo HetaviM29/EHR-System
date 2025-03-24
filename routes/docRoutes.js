@@ -10,9 +10,7 @@ doc_route.set('views','./views');
 
 const docController = require('../controllers/docController');
 
-doc_route.get('/doctordb',(req,res)=>{
-    res.render('doctordb')
-})
+doc_route.get('/doctordb', docController.renderDoctorDashboard);
 
 doc_route.get('/doc-login',(req,res)=>{
    res.render('doctor_signup')

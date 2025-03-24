@@ -47,6 +47,38 @@ const registerDoctor = async (req, res) => {
 };
 
 
+const renderDoctorDashboard = async (req, res) => {
+    try {
+        // Assume the logged-in doctor's ID is available in the session
+        const doctorId = req.user._id;
+
+        // Fetch doctor details
+        const doctor = await Doctor.findById(doctorId);
+
+        if (!doctor) {
+            return res.status(404).send('Doctor not found');
+        }
+        // Prepare doctor view model
+        const doctorViewModel = {
+            name: doctor.name,
+            specialty: doctor.specialty,
+            initials: doctor.name.split(' ').map(n => n[0]).join('').toUpperCase(),
+        };
+
+        // Prepare patient view model (for this example, using the first patient)
+        
+
+        res.render('doctordb', { 
+            doctor: doctorViewModel
+        });
+
+    } catch (error) {
+        console.error('Dashboard Rendering Error:', error);
+        res.status(500).send('Error loading dashboard');
+    }
+};
+
 module.exports = {
-    registerDoctor
+    registerDoctor,
+    renderDoctorDashboard
 };  

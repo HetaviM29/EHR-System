@@ -4,285 +4,206 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HealthConnect Doctor Dashboard</title>
-<link rel="stylesheet" href="../stylesheets/doctor.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+      background-color: #f4f7f6;
+    }
+
+    .header {
+      grid-column: 1 / 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: #2c3e50;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 300;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      background-color: #3498db;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    .sidebar {
+      background-color: #34495e;
+      color: white;
+      padding-top: 20px;
+    }
+
+    .menu-item {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu-item:hover {
+      background-color: #2c3e50;
+    }
+
+    .menu-item.active {
+      background-color: #3498db;
+    }
+
+    .menu-item i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .main-content {
+      padding: 20px;
+      background-color: white;
+      margin: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .patient-search {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .patient-search input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .patient-search button {
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .patient-search button:hover {
+      background-color: #2980b9;
+    }
+
+    .patient-details {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
   <div class="header">
     <h1>HealthConnect Doctor Dashboard</h1>
     <div class="user-info">
-      <div class="avatar">DS</div>
+      <div class="avatar">Doc</div>
       <div>
-        <div>Dr. David Smith</div>
-        <div style="font-size: 12px;">Internal Medicine</div>
+        <div><%= doctor.name %></div>
+        <div style="font-size: 12px;"><%= doctor.specialty %></div>
       </div>
     </div>
   </div>
 
   <div class="sidebar">
-    <div class="menu-item active">Dashboard</div>
-    <div class="menu-item">My Patients</div>
-    <div class="menu-item">Appointments</div>
-    <div class="menu-item">Prescriptions</div>
-    <div class="menu-item">Lab Results</div>
-    <div class="menu-item">Messages</div>
-    <div class="menu-item">Calendar</div>
-    <div class="menu-item">Settings</div>
+    <div class="menu-item active"><i class="fas fa-chart-line"></i>Dashboard</div>
+    <div class="menu-item"><i class="fas fa-users"></i>My Patients</div>
+    <div class="menu-item"><i class="fas fa-calendar-check"></i>Appointments</div>
+    <div class="menu-item"><i class="fas fa-prescription-bottle"></i>Prescriptions</div>
+    <div class="menu-item"><i class="fas fa-flask"></i>Lab Results</div>
+    <div class="menu-item"><i class="fas fa-comment-medical"></i>Messages</div>
+    <div class="menu-item"><i class="fas fa-calendar-alt"></i>Calendar</div>
+    <div class="menu-item"><i class="fas fa-cog"></i>Settings</div>
   </div>  
 
   <div class="main-content">
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Patient Information</div>
-        <button class="btn">View Full Record</button>
-      </div>
-      <div>
-        <h3>Hetavi Modi</h3>
-        <div style="display: flex; margin-bottom: 15px;">
-          <div style="margin-right: 30px;">
-            <div style="color: #757575; font-size: 14px;">Age</div>
-            <div>32 years</div>
-          </div>
-          <div style="margin-right: 30px;">
-            <div style="color: #757575; font-size: 14px;">Gender</div>
-            <div>Female</div>
-          </div>
-          <div style="margin-right: 30px;">
-            <div style="color: #757575; font-size: 14px;">Blood Type</div>
-            <div>O+</div>
-          </div>
-          <div>
-            <div style="color: #757575; font-size: 14px;">Patient ID</div>
-            <div>HM12345</div>
-          </div>
-        </div>
-        <div>
-          <span class="tag">Hypertension</span>
-          <span class="tag">Diabetes Type 2</span>
-          <span class="tag">Allergic to Penicillin</span>
-        </div>
-      </div>
+    <div class="patient-search">
+      <input type="text" id="patientIdInput" placeholder="Enter Patient ID">
+      <button onclick="fetchPatientDetails()">Search Patient</button>
     </div>
 
-    <div class="card">
-      <div class="tabs">
-        <div class="tab active">Prescriptions</div>
-        <div class="tab">Medical Notes</div>
-        <div class="tab">Patient Documents</div>
-        <div class="tab">Upload Documents</div>
-      </div>
-
-      <div class="tab-content active" id="prescriptions">
-        <div class="card-header">
-          <div class="card-title">Current Prescriptions</div>
-          <button class="btn">+ New Prescription</button>
-        </div>
-
-        <div style="display: none;" id="prescription-form">
-          <div class="form-group">
-            <label for="medication">Medication</label>
-            <input type="text" class="form-control" id="medication" placeholder="Enter medication name">
-          </div>
-          <div style="display: flex; gap: 15px;">
-            <div class="form-group" style="flex: 1;">
-              <label for="dosage">Dosage</label>
-              <input type="text" class="form-control" id="dosage" placeholder="e.g. 10mg">
-            </div>
-            <div class="form-group" style="flex: 1;">
-              <label for="frequency">Frequency</label>
-              <input type="text" class="form-control" id="frequency" placeholder="e.g. Twice daily">
-            </div>
-          </div>
-          <div style="display: flex; gap: 15px;">
-            <div class="form-group" style="flex: 1;">
-              <label for="duration">Duration</label>
-              <input type="text" class="form-control" id="duration" placeholder="e.g. 2 weeks">
-            </div>
-            <div class="form-group" style="flex: 1;">
-              <label for="refills">Refills</label>
-              <input type="number" class="form-control" id="refills" placeholder="Number of refills">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="instructions">Special Instructions</label>
-            <textarea class="form-control" id="instructions" placeholder="Enter any special instructions"></textarea>
-          </div>
-          <div style="text-align: right;">
-            <button class="btn btn-secondary" style="margin-right: 10px;">Cancel</button>
-            <button class="btn">Save Prescription</button>
-          </div>
-        </div>
-
-        <div class="prescription-item">
-          <div style="display: flex; justify-content: space-between;">
-            <strong>Lisinopril 10mg</strong>
-            <div>
-              <button class="btn" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-              <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px;">Delete</button>
-            </div>
-          </div>
-          <div style="color: #757575; margin: 5px 0;">Once daily in the morning</div>
-          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-top: 5px;">
-            <div>Duration: 3 months</div>
-            <div>Refills: 2</div>
-            <div>Prescribed: Mar 12, 2025</div>
-          </div>
-        </div>
-
-        <div class="prescription-item">
-          <div style="display: flex; justify-content: space-between;">
-            <strong>Metformin 500mg</strong>
-            <div>
-              <button class="btn" style="padding: 4px 8px; font-size: 12px;">Edit</button>
-              <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px;">Delete</button>
-            </div>
-          </div>
-          <div style="color: #757575; margin: 5px 0;">Twice daily with meals</div>
-          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-top: 5px;">
-            <div>Duration: 6 months</div>
-            <div>Refills: 5</div>
-            <div>Prescribed: Mar 12, 2025</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-content" id="medical-notes">
-        <div class="card-header">
-          <div class="card-title">Medical Notes</div>
-          <button class="btn">+ Add Note</button>
-        </div>
-
-        <div style="display: none;" id="notes-form">
-          <div class="form-group">
-            <label for="note-title">Title</label>
-            <input type="text" class="form-control" id="note-title" placeholder="Enter note title">
-          </div>
-          <div class="form-group">
-            <label for="note-content">Note</label>
-            <textarea class="form-control" id="note-content" placeholder="Enter your medical note"></textarea>
-          </div>
-          <div style="text-align: right;">
-            <button class="btn btn-secondary" style="margin-right: 10px;">Cancel</button>
-            <button class="btn">Save Note</button>
-          </div>
-        </div>
-
-        <div style="border-bottom: 1px solid #eee; padding: 15px 0;">
-          <div style="display: flex; justify-content: space-between;">
-            <strong>Follow-up Appointment</strong>
-            <div style="font-size: 14px; color: #757575;">Mar 12, 2025</div>
-          </div>
-          <p>Patient shows improvement in blood pressure readings. Continue with current medication. Follow up appointment in 2 weeks. Recommended daily monitoring of blood pressure.</p>
-        </div>
-
-        <div style="border-bottom: 1px solid #eee; padding: 15px 0;">
-          <div style="display: flex; justify-content: space-between;">
-            <strong>Initial Consultation</strong>
-            <div style="font-size: 14px; color: #757575;">Mar 1, 2025</div>
-          </div>
-          <p>Patient presents with symptoms of hypertension. BP readings consistently high over the past month. Started on Lisinopril 10mg daily. Advised on diet modifications and regular exercise.</p>
-        </div>
-      </div>
-
-      <div class="tab-content" id="patient-documents">
-        <div class="card-header">
-          <div class="card-title">Patient Documents</div>
-        </div>
-
-        <ul class="document-list">
-          <li class="document-item">
-            <div>
-              <i class="document-icon">📄</i>
-              <span>Blood Test Results.pdf</span>
-            </div>
-            <div>
-              <span class="document-date">Uploaded Mar 15, 2025</span>
-              <button class="btn" style="padding: 4px 8px; font-size: 12px; margin-left: 10px;">View</button>
-            </div>
-          </li>
-          <li class="document-item">
-            <div>
-              <i class="document-icon">📄</i>
-              <span>ECG report.jpg</span>
-            </div>
-            <div>
-              <span class="document-date">Uploaded Mar 10, 2025</span>
-              <button class="btn" style="padding: 4px 8px; font-size: 12px; margin-left: 10px;">View</button>
-            </div>
-          </li>
-          <li class="document-item">
-            <div>
-              <i class="document-icon">📄</i>
-              <span>Medical History.docx</span>
-            </div>
-            <div>
-              <span class="document-date">Uploaded Mar 5, 2025</span>
-              <button class="btn" style="padding: 4px 8px; font-size: 12px; margin-left: 10px;">View</button>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="tab-content" id="upload-documents">
-        <div class="card-header">
-          <div class="card-title">Upload Documents</div>
-        </div>
-
-        <div class="drag-area">
-          Drag files here or click to browse
-        </div>
-
-        <div class="form-group">
-          <label for="document-type">Document Type</label>
-          <select class="form-control" id="document-type">
-            <option>Select document type</option>
-            <option>Lab Report</option>
-            <option>Imaging Report</option>
-            <option>Referral Letter</option>
-            <option>Discharge Summary</option>
-            <option>Other</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="document-description">Description</label>
-          <textarea class="form-control" id="document-description" placeholder="Enter description of the document"></textarea>
-        </div>
-
-        <div style="text-align: right;">
-          <button class="btn">Upload Document</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Upcoming Appointments</div>
-        <button class="btn">View All</button>
-      </div>
-
-      <ul class="patient-list">
-        <li class="patient-item">
-          <div>
-            <div><strong>Hetavi Modi</strong> - Follow-up</div>
-            <div style="font-size: 14px; color: #757575;">Today, 2:30 PM</div>
-          </div>
-          <span class="badge">Next</span>
-        </li>
-        <li class="patient-item">
-          <div>
-            <div><strong>John Williams</strong> - Initial Consultation</div>
-            <div style="font-size: 14px; color: #757575;">Today, 3:15 PM</div>
-          </div>
-        </li>
-        <li class="patient-item">
-          <div>
-            <div><strong>Sarah Johnson</strong> - Lab Results Review</div>
-            <div style="font-size: 14px; color: #757575;">Today, 4:00 PM</div>
-          </div>
-        </li>
-      </ul>
+    <div id="patientDetailsContainer" class="patient-details">
+      <p>Patient details will appear here after searching</p>
     </div>
   </div>
+
+  <script>
+    function fetchPatientDetails() {
+      const patientId = document.getElementById('patientIdInput').value;
+      const detailsContainer = document.getElementById('patientDetailsContainer');
+
+      if (!patientId) {
+        detailsContainer.innerHTML = '<p>Please enter a Patient ID</p>';
+        return;
+      }
+
+      // Simulated patient data fetch (replace with actual API call)
+      const patientData = {
+        1: { 
+          name: 'John Doe', 
+          age: 45, 
+          gender: 'Male', 
+          condition: 'Hypertension', 
+          lastVisit: '2024-03-15' 
+        },
+        2: { 
+          name: 'Jane Smith', 
+          age: 35, 
+          gender: 'Female', 
+          condition: 'Diabetes', 
+          lastVisit: '2024-03-20' 
+        }
+      };
+
+      const patient = patientData[patientId];
+
+      if (patient) {
+        detailsContainer.innerHTML = `
+          <h3>Patient Details</h3>
+          <p><strong>Name:</strong> ${patient.name}</p>
+          <p><strong>Age:</strong> ${patient.age}</p>
+          <p><strong>Gender:</strong> ${patient.gender}</p>
+          <p><strong>Condition:</strong> ${patient.condition}</p>
+          <p><strong>Last Visit:</strong> ${patient.lastVisit}</p>
+        `;
+      } else {
+        detailsContainer.innerHTML = '<p>Patient not found</p>';
+      }
+    }
+  </script>
 </body>
-<script src="../javascripts/doc.js"></script>
 </html>
