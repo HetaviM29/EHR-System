@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const File = require('../models/fileModel');
-
+const Recommendation = require('../models/docRecommend');
 
 const loadLogin = async(req,res)=>{
     res.render('login');
@@ -30,12 +30,21 @@ const addUser = async(req,res)=>{
 
 const loadProfile = async(req,res)=>{
     try{
-        const files = await File.find().sort({uploadedAt: -1});
+        // Only get files for the logged-in patient
+        const files = await File.find({ patientId: req.user.patientId })
+                              .sort({ uploadedAt: -1 })
+                              .limit(10); // Show only 10 most recent
+        
+        // Get doctor recommendations for this patient
+        const recommendations = await Recommendation.find({ 
+            patientId: req.user.patientId 
+        }).sort({ date: -1 });
 
         res.render('patientdb1',{
-                user: req.user,
-                files:files
-            });
+            user: req.user,
+            files: files,
+            recommendations: recommendations
+        });
     }catch(error){
         console.error('Error Fetching files: ',error);
         res.status(500).send('Error loading dashboard');

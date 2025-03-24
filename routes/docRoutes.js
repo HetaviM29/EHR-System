@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
+
 const doc_route = express();
 doc_route.use(bodyParser.json());
 doc_route.use(bodyParser.urlencoded({extended:true}));
@@ -39,5 +40,23 @@ doc_route.post('/doctor/login',(req,res,next)=>{
 });
 
 doc_route.post('/doctor/search-patient', docController.searchPatient);
+doc_route.post('/doctor/upload/:patientId', 
+  passport.authenticate('user-local', { session: false }),
+  docController.uploadMiddleware,
+  docController.handleFileUpload
+);
+
+doc_route.get('/patient/files/:patientId', 
+  passport.authenticate('user-local', { session: false }),
+  async (req, res) => {
+    try {
+      const files = await File.find({ patientId: req.params.patientId })
+                             .sort({ uploadedAt: -1 });
+      res.json(files);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching files' });
+    }
+  }
+);
 
 module.exports = doc_route;

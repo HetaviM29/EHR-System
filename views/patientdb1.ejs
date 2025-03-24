@@ -16,11 +16,72 @@
             font-size: 0.9em;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+        
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        
+        .file-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-list li a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .file-list li a:hover {
+            text-decoration: underline;
+        }
+        
+        .file-meta {
+            font-size: 0.8em;
+            color: #7f8c8d;
+        }
+        
+        .file-notes {
+            font-style: italic;
+            color: #555;
+            margin-top: 5px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #3498db;
+            padding: 20px;
+            text-align: center;
+            margin: 15px 0;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .upload-area:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .recommendation {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <!-- Header Section -->
-     <div class="header">
+    <div class="header">
         <div class="profile">
             <div class="profile-icon"><img src="../images/pfp_final_1.png" alt="user-pfp" class="profile-img"></div>  
             <span><%= user.name %></span>
@@ -33,75 +94,176 @@
     </div>
 
     <!-- Container -->
-     <div class="container">
-
+    <div class="container">
         <!-- side nav bar -->
         <div class="sidebar">
             <div class="menu-item active">Dashboard</div>
-            <div class="menu-item">My Patients</div>
+            <div class="menu-item">My Health Records</div>
             <div class="menu-item">Appointments</div>
             <div class="menu-item">Prescriptions</div>
             <div class="menu-item">Lab Results</div>
             <div class="menu-item">Messages</div>
-            <div class="menu-item">Calendar</div>
             <div class="menu-item">Settings</div>
-          </div>  
+        </div>  
 
         <!-- Main content -->
-         <div class="content">
+        <div class="content">
             <h2 class="content-title">My Documents</h2>
 
             <!-- Upload Recent Files Section -->
-            <form action="/upload" method="post" enctype="multipart/form-data">
+            <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
                 <div class="row">
                     <div class="col-6">
                         <div class="card">
                             <h3 class="card-title">Upload Documents</h3>
-                            <div class="upload-area" id="dropArea">
+                            <div class="upload-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
                                 <p>Drag files here or click to browse</p>
                                 <input type="file" id="fileInput" name="myfile" style="display: none;" multiple>
+                            </div>
+                            <div class="form-group">
+                                <label for="fileType">Document Type:</label>
+                                <select name="fileType" id="fileType" required>
+                                    <option value="report">Medical Report</option>
+                                    <option value="prescription">Prescription</option>
+                                    <option value="lab_result">Lab Result</option>
+                                    <option value="other">Other</option>
+                                </select>
                             </div>
                             <button class="button" type="submit" id="uploadBtn">Upload</button>
                         </div>
                     </div>
                 </div>
             </form>
-                 <!-- Recent uploads section -->
-                 <div class="col-6">
-                    <div class="card">
-                        <h3 class="card-title">Recent Uploads</h3>
-                        <ul class="file-list">
-                            <% if (files && files.length > 0) { %>
-                                <% files.forEach(function(file) { %>
-                                    <li>
-                                        <a href="<%= file.path %>" target="_blank"><%= file.filename %></a>
-                                    </li>
-                                <% }) %>
-                            <% } else { %>
-                                <li>No recent uploads</li>
-                            <% } %>
-                        </ul>
-                        <a href="#" class="view-all">View all Documents</a>
-                        </div>
-                    </div>
-                 </div>
 
-                 <!-- Recommendation Section -->
-                 <div class="card">
-                    <h3 class="card-title">Doctor's Recommendations</h3>
-                    
-                    <div class="recommendation">
-                        <div class="recommendation-header">
-                            <span class="doctor-name"></span>
-                            <span class="date"></span>
-                        </div>
-                        <p class="recommendation-text">Doctor Recommedations will appear here</p>
-                    </div>
-                    
-                    
+            <!-- Recent uploads section -->
+            <div class="col-6">
+                <div class="card">
+                    <h3 class="card-title">Recent Uploads</h3>
+                    <ul class="file-list">
+                        <% if (files && files.length > 0) { %>
+                            <% files.forEach(function(file) { %>
+                                <li>
+                                    <div>
+                                        <a href="<%= file.path %>" target="_blank"><%= file.filename %></a>
+                                        <div class="file-meta">
+                                            Uploaded: <%= new Date(file.uploadedAt).toLocaleDateString() %> | 
+                                            Type: <%= file.fileType || 'Document' %>
+                                        </div>
+                                        <% if (file.doctorNotes) { %>
+                                            <div class="file-notes">Notes: <%= file.doctorNotes %></div>
+                                        <% } %>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>No documents uploaded yet</li>
+                        <% } %>
+                    </ul>
+                    <a href="#" class="view-all">View all Documents</a>
                 </div>
-         </div>
-     </div>
+            </div>
+
+            <!-- Recommendation Section -->
+            <div class="card">
+                <h3 class="card-title">Doctor's Recommendations</h3>
+                <% if (recommendations && recommendations.length > 0) { %>
+                    <% recommendations.forEach(function(recommendation) { %>
+                        <div class="recommendation">
+                            <div class="recommendation-header">
+                                <span class="doctor-name">Dr. <%= recommendation.doctorName %></span>
+                                <span class="date"><%= new Date(recommendation.date).toLocaleDateString() %></span>
+                            </div>
+                            <p class="recommendation-text"><%= recommendation.text %></p>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="recommendation">
+                        <p class="recommendation-text">No recommendations available</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle file upload form submission
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            try {
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = 'Uploading...';
+                
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    window.location.reload(); // Refresh to show new upload
+                } else {
+                    const error = await response.text();
+                    alert('Upload failed: ' + error);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Error uploading file');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Upload';
+            }
+        });
+
+        // Drag and drop functionality
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dropArea.style.backgroundColor = '#e9f7fe';
+        }
+
+        function unhighlight() {
+            dropArea.style.backgroundColor = '';
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            
+            // Update UI to show selected files
+            if (files.length > 0) {
+                dropArea.innerHTML = `<p>${files.length} file(s) selected</p>`;
+            }
+        }
+
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                dropArea.innerHTML = `<p>${this.files.length} file(s) selected</p>`;
+            }
+        });
+    </script>
 </body>
-<script src="../javascripts/script.js"></script>
 </html>

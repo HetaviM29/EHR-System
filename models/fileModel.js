@@ -9,10 +9,29 @@ const fileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    fileType: {
+        type: String,
+        enum: ['report', 'prescription', 'image', 'other'],
+        required: true
+    },
+    uploadedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    patientId: {
+        type: String,
+        ref: 'EHR',
+        required: true
+    },
+    doctorNotes: {
+        type: String,
+        default: ''
+    },
     uploadedAt: {
         type: Date,
         default: Date.now
     }
 });
 
-module.exports = mongoose.model('File',fileSchema);
+module.exports = mongoose.model('File', fileSchema);

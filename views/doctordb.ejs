@@ -90,6 +90,7 @@
       margin: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      overflow-y: auto;
     }
 
     .patient-search {
@@ -125,46 +126,142 @@
       border-radius: 8px;
       margin-top: 20px;
     }
+
     .patient-info {
-  background-color: white;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+      background-color: white;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-.patient-info p {
-  margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
-}
+    .patient-info p {
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
 
-.patient-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
+    .patient-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
 
-.patient-actions button {
-  padding: 8px 15px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    .patient-actions button {
+      padding: 8px 15px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-.patient-actions button:hover {
-  background-color: #2980b9;
-}
+    .patient-actions button:hover {
+      background-color: #2980b9;
+    }
+
+    .upload-form {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .upload-form h3 {
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-group input[type="file"],
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .upload-btn {
+      padding: 10px 20px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      background-color: #219653;
+    }
+
+    .file-list {
+      margin-top: 20px;
+    }
+
+    .file-list h3 {
+      margin-bottom: 15px;
+    }
+
+    .file-item {
+      background-color: white;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .file-info {
+      flex-grow: 1;
+    }
+
+    .file-info a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .file-info a:hover {
+      text-decoration: underline;
+    }
+
+    .file-meta {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin-top: 5px;
+    }
+
+    .file-notes {
+      margin-top: 5px;
+      font-style: italic;
+      color: #555;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>HealthConnect Doctor Dashboard</h1>
     <div class="user-info">
-      <div class="avatar">Doc</div>
+      <div class="avatar">Dr</div>
       <div>
         <div><%= doctor.name %></div>
         <div style="font-size: 12px;"><%= doctor.specialty %></div>
@@ -190,24 +287,66 @@
     </div>
 
     <div id="patientDetailsContainer" class="patient-details">
-      <p>Patient details will appear here after searching</p>
+      <p>Enter a patient ID to search for patient details</p>
+    </div>
+
+    <div id="uploadFormContainer" class="upload-form">
+      <h3>Upload File for Patient</h3>
+      <form id="doctorUploadForm" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="doctorFile">Select File</label>
+          <input type="file" id="doctorFile" name="doctorFile" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="fileType">File Type</label>
+          <select id="fileType" name="fileType" required>
+            <option value="report">Medical Report</option>
+            <option value="prescription">Prescription</option>
+            <option value="image">Scan/Image</option>
+            <option value="other">Other Document</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="notes">Doctor Notes</label>
+          <textarea id="notes" name="notes" placeholder="Enter any notes for the patient..."></textarea>
+        </div>
+        
+        <button type="submit" class="upload-btn">Upload File</button>
+      </form>
+    </div>
+
+    <div id="patientFilesContainer" class="file-list">
+      <h3>Patient Files</h3>
+      <div id="filesList">
+        <p>Patient files will appear here after selection</p>
+      </div>
     </div>
   </div>
 
   <script>
+    let currentPatientId = null;
+
     async function fetchPatientDetails() {
       const patientId = document.getElementById('patientIdInput').value.trim();
       const container = document.getElementById('patientDetailsContainer');
+      const uploadForm = document.getElementById('uploadFormContainer');
+      const filesList = document.getElementById('filesList');
       
       if (!patientId) {
         container.innerHTML = '<p>Please enter a Patient ID</p>';
+        uploadForm.style.display = 'none';
+        filesList.innerHTML = '<p>Please enter a Patient ID</p>';
         return;
       }
 
       container.innerHTML = '<p>Searching for patient...</p>';
+      filesList.innerHTML = '<p>Loading files...</p>';
 
       try {
-        const response = await fetch('/doctor/search-patient', {
+        // Fetch patient details
+        const patientResponse = await fetch('/doctor/search-patient', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -215,44 +354,130 @@
           body: JSON.stringify({ patientId })
         });
 
-        const data = await response.json();
+        const patientData = await patientResponse.json();
 
-        if (response.ok) {
+        if (patientResponse.ok) {
           // Display patient details
           container.innerHTML = `
             <h3>Patient Details</h3>
             <div class="patient-info">
-              <p><strong>Name:</strong> ${data.name}</p>
-              <p><strong>Patient ID:</strong> ${data.patientId}</p>
-              <p><strong>Email:</strong> ${data.email}</p>
-              <!-- Add more patient details as needed -->
+              <p><strong>Name:</strong> ${patientData.name}</p>
+              <p><strong>Patient ID:</strong> ${patientData.patientId}</p>
+              <p><strong>Email:</strong> ${patientData.email}</p>
             </div>
             <div class="patient-actions">
-              <button onclick="viewPatientRecords('${data.patientId}')">View Records</button>
-              <button onclick="scheduleAppointment('${data.patientId}')">Schedule Appointment</button>
+              <button onclick="viewPatientRecords('${patientData.patientId}')">View Records</button>
+              <button onclick="scheduleAppointment('${patientData.patientId}')">Schedule Appointment</button>
             </div>
           `;
+
+          // Show upload form and store current patient ID
+          uploadForm.style.display = 'block';
+          currentPatientId = patientData.patientId;
+
+          // Load patient files
+          await loadPatientFiles(patientData.patientId);
         } else {
-          container.innerHTML = `<p>Error: ${data.error || 'Patient not found'}</p>`;
+          container.innerHTML = `<p>Error: ${patientData.error || 'Patient not found'}</p>`;
+          uploadForm.style.display = 'none';
+          filesList.innerHTML = '<p>No patient selected</p>';
         }
       } catch (error) {
         console.error('Error:', error);
         container.innerHTML = '<p>Error searching for patient</p>';
+        uploadForm.style.display = 'none';
+        filesList.innerHTML = '<p>Error loading files</p>';
       }
     }
+
+    async function loadPatientFiles(patientId) {
+      const filesList = document.getElementById('filesList');
+      
+      try {
+        const response = await fetch(`/patient/files/${patientId}`);
+        const files = await response.json();
+        
+        if (files.error) {
+          filesList.innerHTML = `<p>${files.error}</p>`;
+          return;
+        }
+        
+        if (files.length === 0) {
+          filesList.innerHTML = '<p>No files found for this patient</p>';
+        } else {
+          let html = '';
+          files.forEach(file => {
+            const fileDate = new Date(file.uploadedAt).toLocaleDateString();
+            html += `
+              <div class="file-item">
+                <div class="file-info">
+                  <a href="${file.path}" target="_blank">${file.filename}</a>
+                  <div class="file-meta">
+                    <span>${file.fileType} • ${fileDate}</span>
+                  </div>
+                  ${file.doctorNotes ? `<div class="file-notes">Notes: ${file.doctorNotes}</div>` : ''}
+                </div>
+              </div>
+            `;
+          });
+          filesList.innerHTML = html;
+        }
+      } catch (error) {
+        console.error('Error loading files:', error);
+        filesList.innerHTML = '<p>Error loading patient files</p>';
+      }
+    }
+
+    document.getElementById('doctorUploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!currentPatientId) {
+        alert('Please select a patient first');
+        return;
+      }
+
+      const formData = new FormData(e.target);
+      const uploadBtn = e.target.querySelector('button[type="submit"]');
+      
+      try {
+        // Disable button during upload
+        uploadBtn.disabled = true;
+        uploadBtn.textContent = 'Uploading...';
+        
+        const response = await fetch(`/doctor/upload/${currentPatientId}`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+          alert(`Error: ${result.error}`);
+        } else {
+          alert('File uploaded successfully!');
+          e.target.reset();
+          // Refresh file list
+          await loadPatientFiles(currentPatientId);
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert('Error uploading file');
+      } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = 'Upload File';
+      }
+    });
 
     // Example functions for additional actions
     function viewPatientRecords(patientId) {
       // Implement view records functionality
-      alert(`View records for patient ${patientId}`);
+      console.log(`Viewing records for patient ${patientId}`);
     }
 
     function scheduleAppointment(patientId) {
       // Implement schedule appointment functionality
-      alert(`Schedule appointment for patient ${patientId}`);
+      console.log(`Scheduling appointment for patient ${patientId}`);
     }
-
-      
-    </script>
+  </script>
 </body>
 </html>
