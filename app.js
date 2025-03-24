@@ -9,7 +9,7 @@ const File = require('./models/fileModel');
 
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/");
+mongoose.connect("mongodb://localhost:27017/EHR-db");
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:true}));
@@ -32,9 +32,9 @@ app.use(passport.session());
 require('./config/passport')(passport);
 
 const userRoutes = require('./routes/userRoutes');
-
+const docRoutes = require('./routes/docRoutes');
 app.use('/',userRoutes);
-
+app.use('/',docRoutes);
 
 const storage = multer.diskStorage({
     destination: './uploads',
@@ -114,13 +114,6 @@ port = 8000;
 //     res.render('patientdb')
 // })
 
-app.get('/doctordb',(req,res)=>{
-     res.render('doctordb')
- })
-
-app.get('/doc-login',(req,res)=>{
-    res.render('signup' )
-})
 
 
 app.listen(port,()=>{

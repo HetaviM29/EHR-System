@@ -13,7 +13,7 @@ const userController = require('../controllers/userController');
 user_route.get("/",userController.loadLogin);
 user_route.post('/register',userController.addUser);
 user_route.post('/login',(req,res,next)=>{
-    passport.authenticate("local",(err,user,info)=>{
+    passport.authenticate("user-local",(err,user,info)=>{
         if(err){
             console.error("Passport Error: ",err);
             return next(err);
