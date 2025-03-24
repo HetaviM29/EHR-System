@@ -78,7 +78,38 @@ const renderDoctorDashboard = async (req, res) => {
     }
 };
 
+const searchPatient = async (req, res) => {
+    try {
+        const { patientId } = req.body;
+
+        // Find patient by patientId
+        const patient = await User.findOne({ patientId });
+
+        if (!patient) {
+            return res.status(404).json({ 
+                error: 'Patient not found' 
+            });
+        }
+
+        // You can add more patient details here as needed
+        const patientDetails = {
+            name: patient.name,
+            email: patient.email,
+            patientId: patient.patientId,
+            // Add any other relevant patient information
+        };
+
+        res.json(patientDetails);
+
+    } catch (error) {
+        console.error('Patient Search Error:', error);
+        res.status(500).json({ 
+            error: 'Error searching for patient' 
+        });
+    }
+};
 module.exports = {
     registerDoctor,
-    renderDoctorDashboard
+    renderDoctorDashboard,
+    searchPatient
 };  

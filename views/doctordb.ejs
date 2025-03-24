@@ -125,6 +125,39 @@
       border-radius: 8px;
       margin-top: 20px;
     }
+    .patient-info {
+  background-color: white;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.patient-info p {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.patient-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.patient-actions button {
+  padding: 8px 15px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.patient-actions button:hover {
+  background-color: #2980b9;
+}
   </style>
 </head>
 <body>
@@ -162,48 +195,64 @@
   </div>
 
   <script>
-    function fetchPatientDetails() {
-      const patientId = document.getElementById('patientIdInput').value;
-      const detailsContainer = document.getElementById('patientDetailsContainer');
-
+    async function fetchPatientDetails() {
+      const patientId = document.getElementById('patientIdInput').value.trim();
+      const container = document.getElementById('patientDetailsContainer');
+      
       if (!patientId) {
-        detailsContainer.innerHTML = '<p>Please enter a Patient ID</p>';
+        container.innerHTML = '<p>Please enter a Patient ID</p>';
         return;
       }
 
-      // Simulated patient data fetch (replace with actual API call)
-      const patientData = {
-        1: { 
-          name: 'John Doe', 
-          age: 45, 
-          gender: 'Male', 
-          condition: 'Hypertension', 
-          lastVisit: '2024-03-15' 
-        },
-        2: { 
-          name: 'Jane Smith', 
-          age: 35, 
-          gender: 'Female', 
-          condition: 'Diabetes', 
-          lastVisit: '2024-03-20' 
+      container.innerHTML = '<p>Searching for patient...</p>';
+
+      try {
+        const response = await fetch('/doctor/search-patient', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ patientId })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Display patient details
+          container.innerHTML = `
+            <h3>Patient Details</h3>
+            <div class="patient-info">
+              <p><strong>Name:</strong> ${data.name}</p>
+              <p><strong>Patient ID:</strong> ${data.patientId}</p>
+              <p><strong>Email:</strong> ${data.email}</p>
+              <!-- Add more patient details as needed -->
+            </div>
+            <div class="patient-actions">
+              <button onclick="viewPatientRecords('${data.patientId}')">View Records</button>
+              <button onclick="scheduleAppointment('${data.patientId}')">Schedule Appointment</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `<p>Error: ${data.error || 'Patient not found'}</p>`;
         }
-      };
-
-      const patient = patientData[patientId];
-
-      if (patient) {
-        detailsContainer.innerHTML = `
-          <h3>Patient Details</h3>
-          <p><strong>Name:</strong> ${patient.name}</p>
-          <p><strong>Age:</strong> ${patient.age}</p>
-          <p><strong>Gender:</strong> ${patient.gender}</p>
-          <p><strong>Condition:</strong> ${patient.condition}</p>
-          <p><strong>Last Visit:</strong> ${patient.lastVisit}</p>
-        `;
-      } else {
-        detailsContainer.innerHTML = '<p>Patient not found</p>';
+      } catch (error) {
+        console.error('Error:', error);
+        container.innerHTML = '<p>Error searching for patient</p>';
       }
     }
-  </script>
+
+    // Example functions for additional actions
+    function viewPatientRecords(patientId) {
+      // Implement view records functionality
+      alert(`View records for patient ${patientId}`);
+    }
+
+    function scheduleAppointment(patientId) {
+      // Implement schedule appointment functionality
+      alert(`Schedule appointment for patient ${patientId}`);
+    }
+
+      
+    </script>
 </body>
 </html>

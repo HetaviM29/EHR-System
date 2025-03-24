@@ -38,4 +38,6 @@ doc_route.post('/doctor/login',(req,res,next)=>{
     })(req,res,next);
 });
 
+doc_route.post('/doctor/search-patient', docController.searchPatient);
+
 module.exports = doc_route;

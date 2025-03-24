@@ -5,17 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="../stylesheets/style.css">
+    <style>
+        .patient-id-display {
+            background-color: #2c3e50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 0.9em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body>
     <!-- Header Section -->
      <div class="header">
-   
-    <div class="profile">
-        <div class="profile-icon"><img src="../images/pfp_final_1.png" alt="user-pfp" class="profile-img"></div>  
-        <span><%= user.name %></span>
-    </div>
-    <h1>HealthConnect Patient Portal</h1>
-    <button id="logout-btn" class="logout-btn"><a href="logout">Logout</a></button>
+        <div class="profile">
+            <div class="profile-icon"><img src="../images/pfp_final_1.png" alt="user-pfp" class="profile-img"></div>  
+            <span><%= user.name %></span>
+            <% if (user.patientId) { %>
+                <span class="patient-id-display">Patient ID: <%= user.patientId %></span>
+            <% } %>
+        </div>
+        <h1>HealthConnect Patient Portal</h1>
+        <button id="logout-btn" class="logout-btn"><a href="logout">Logout</a></button>
     </div>
 
     <!-- Container -->
@@ -78,19 +92,13 @@
                     
                     <div class="recommendation">
                         <div class="recommendation-header">
-                            <span class="doctor-name">Dr. Sarah Johnson - Cardiologist</span>
-                            <span class="date">Mar 12</span>
+                            <span class="doctor-name"></span>
+                            <span class="date"></span>
                         </div>
-                        <p class="recommendation-text">Follow up appointment in 2 weeks. Continue with current medication.</p>
+                        <p class="recommendation-text">Doctor Recommedations will appear here</p>
                     </div>
                     
-                    <div class="recommendation">
-                        <div class="recommendation-header">
-                            <span class="doctor-name">Dr. Michael Chen - Primary Care</span>
-                            <span class="date">Mar 10</span>
-                        </div>
-                        <p class="recommendation-text">Please upload your latest blood glucose readings before next visit.</p>
-                    </div>
+                    
                 </div>
          </div>
      </div>
